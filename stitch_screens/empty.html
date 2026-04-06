@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;600;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e4e2df",
+                    "inverse-surface": "#30312f",
+                    "surface-bright": "#fbf9f6",
+                    "primary-container": "#b4b2b2",
+                    "secondary-fixed-dim": "#e9c176",
+                    "on-background": "#1b1c1a",
+                    "inverse-primary": "#c8c6c5",
+                    "on-primary-fixed-variant": "#474746",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "on-tertiary-fixed": "#021e2d",
+                    "on-secondary-fixed-variant": "#5d4201",
+                    "secondary": "#775a19",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbdad7",
+                    "secondary-fixed": "#ffdea5",
+                    "secondary-container": "#fed488",
+                    "on-error": "#ffffff",
+                    "surface-container": "#efeeeb",
+                    "on-tertiary-fixed-variant": "#31495b",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1c1a",
+                    "surface-container-high": "#eae8e5",
+                    "outline": "#7f7663",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#785a1a",
+                    "primary-fixed": "#e5e2e1",
+                    "on-secondary-fixed": "#261900",
+                    "on-tertiary-container": "#304859",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#9db6ca",
+                    "on-primary-fixed": "#1c1b1b",
+                    "tertiary-fixed": "#cce6fb",
+                    "inverse-on-surface": "#f2f0ed",
+                    "outline-variant": "#d0c5af",
+                    "surface-container-low": "#f5f3f0",
+                    "primary": "#5f5e5e",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#496173",
+                    "surface": "#fbf9f6",
+                    "background": "#fbf9f6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#454545",
+                    "tertiary-fixed-dim": "#b1cade",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#5f5e5e",
+                    "on-surface-variant": "#4d4635",
+                    "surface-variant": "#e4e2df"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Manrope"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .iris-gradient {
+            background: radial-gradient(circle at center, transparent 30%, #5f5e5e 31%, #5f5e5e 32%, transparent 33%);
+        }
+        .editorial-asymmetry {
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container min-h-screen flex flex-col">
+<header class="bg-surface/70 dark:bg-black/70 backdrop-blur-xl fixed top-0 w-full z-50 shadow-sm shadow-stone-900/5">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-stone-800 dark:text-stone-100" data-icon="camera">camera</span>
+<h1 class="text-xl font-headline tracking-widest uppercase text-stone-900 dark:text-stone-50">THE CURATED LENS</h1>
+</div>
+<nav class="hidden md:flex gap-8 items-center font-label text-xs tracking-widest uppercase">
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 transition-colors duration-300" href="#">Gallery</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 transition-colors duration-300" href="#">About</a>
+<a class="text-stone-900 dark:text-stone-50 border-b border-stone-400 dark:border-stone-600" href="#">Connect</a>
+</nav>
+<button class="material-symbols-outlined text-stone-800 dark:text-stone-100 p-2 hover:bg-surface-container transition-colors" data-icon="dark_mode">dark_mode</button>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center pt-24 pb-12">
+<section class="max-w-4xl w-full editorial-asymmetry flex flex-col items-center text-center">
+<div class="relative w-64 h-64 md:w-80 md:h-80 mb-12 flex items-center justify-center">
+<div class="absolute inset-0 border-[0.5px] border-outline-variant opacity-20 rounded-full"></div>
+<div class="absolute inset-4 border-[0.5px] border-outline-variant opacity-10 rounded-full"></div>
+<div class="relative flex flex-col items-center">
+<span class="material-symbols-outlined text-[120px] md:text-[160px] text-primary/20" data-icon="camera" style="font-variation-settings: 'wght' 100;">camera</span>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-4xl text-secondary animate-pulse" data-icon="fiber_manual_record" style="font-variation-settings: 'FILL' 1;">fiber_manual_record</span>
+</div>
+</div>
+</div>
+<div class="space-y-6 max-w-lg">
+<h2 class="font-headline italic text-4xl md:text-5xl text-on-surface tracking-tight">The Frame is Empty.</h2>
+<p class="text-stone-500 leading-relaxed font-body text-lg">
+                    Your digital archive awaits curation. Connect your library to begin weaving your visual narrative.
+                </p>
+<div class="pt-8 flex flex-col items-center gap-6">
+<button class="group relative px-8 py-4 bg-primary text-on-primary font-label text-sm tracking-widest uppercase transition-all duration-300 hover:bg-secondary flex items-center gap-3">
+<span class="material-symbols-outlined text-lg" data-icon="google_drive">drive_file_gmail</span>
+                        Connect
+                    </button>
+<div class="flex items-center gap-4 text-outline font-label text-[10px] tracking-widest uppercase">
+<span class="w-8 h-[1px] bg-outline-variant/30"></span>
+<span>Select Folder</span>
+<span class="w-8 h-[1px] bg-outline-variant/30"></span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-24 right-[10%] hidden xl:block opacity-40">
+<p class="font-label text-[10px] tracking-[0.3em] uppercase vertical-text transform rotate-90 origin-right text-stone-400">
+                    Curating Materiality
+                </p>
+</div>
+</section>
+</main>
+<div class="fixed inset-0 -z-10 pointer-events-none opacity-40">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-surface-container-low rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-surface-container-highest rounded-full blur-[100px]"></div>
+</div>
+<footer class="w-full py-12 px-8 bg-surface dark:bg-stone-950">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto border-t border-stone-200/20 pt-8">
+<div class="flex items-center gap-6">
+<span class="text-sm font-headline uppercase tracking-widest text-on-surface">THE CURATED LENS</span>
+<p class="font-body text-xs tracking-widest text-stone-400 dark:text-stone-600 uppercase">© THE CURATED LENS. PHOTOGRAPHY AS MATERIAL.</p>
+</div>
+<nav class="flex gap-8 font-body text-xs tracking-widest uppercase text-stone-400 dark:text-stone-600">
+<a class="hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Archives</a>
+<a class="hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Process</a>
+<a class="hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Legal</a>
+</nav>
+</div>
+</footer>
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-lg bg-surface/80 dark:bg-stone-950/80 backdrop-blur-lg shadow-[0_-8px_24px_rgba(27,28,26,0.06)]">
+<div class="flex justify-around items-center pt-2 pb-6 px-4">
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-600" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-body text-[10px] uppercase tracking-widest">Gallery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-600" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-body text-[10px] uppercase tracking-widest">About</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber-700 dark:text-amber-500 font-bold" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="google_drive">drive_file_gmail</span>
+<span class="font-body text-[10px] uppercase tracking-widest">Connect</span>
+</a>
+</div>
+</nav>
+</body></html>

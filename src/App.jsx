@@ -1,0 +1,130 @@
+import { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import EmptyState from './components/EmptyState';
+import Gallery from './components/Gallery';
+import { connectToGoogleDrive } from './services/googleDrive';
+
+function Portfolio() {
+  const { username } = useParams();
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
+        if (!res.ok) throw new Error("Profile not found. They might not have connected their Google Drive yet.");
+        
+        const data = await res.json();
+        const { folderId } = data;
+        
+        const driveData = await connectToGoogleDrive(folderId);
+        if (driveData.files && driveData.files.length > 0) {
+          setImages(driveData.files);
+        } else {
+          setImages([]);
+        }
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (username) fetchProfile();
+  }, [username]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-surface">
+         <span className="material-symbols-outlined text-stone-900 text-6xl animate-spin" style={{fontVariationSettings: "'wght' 100"}}>refresh</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center flex-col gap-4 bg-surface">
+        <h2 className="font-notoSerif text-3xl italic">{error}</h2>
+        <button onClick={() => window.location.href='/'} className="font-manrope text-xs tracking-widest uppercase hover:text-secondary underline">Return Home</button>
+      </div>
+    );
+  }
+
+  return images.length > 0 ? <Gallery images={images} /> : <EmptyState onConnect={() => {}} />;
+}
+
+function Home() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleConnect = async (username, folderLink) => {
+    setLoading(true);
+    try {
+      let folderId = folderLink;
+      if (folderLink.includes('folders/')) {
+         folderId = folderLink.split('folders/')[1].split('?')[0];
+      } else if (folderLink.includes('id=')) {
+         folderId = folderLink.split('id=')[1].split('&')[0];
+      }
+
+      const res = await fetch('/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, folderId })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      navigate(`/${data.username}`);
+    } catch (e) {
+      alert("Error: " + e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Hero onConnect={handleConnect} isLoading={loading} />
+  );
+}
+
+function App() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  return (
+    <div className="min-h-screen bg-surface">
+      <Header />
+      
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/:username" element={<Portfolio />} />
+      </Routes>
+      
+      {!isHome && (
+        <footer className="bg-surface dark:bg-stone-950 w-full py-12 px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto border-t border-stone-200/20 pt-12">
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-headline uppercase tracking-widest text-on-surface">THE CURATED LENS</span>
+              <p className="font-label text-[10px] tracking-widest text-stone-400">© THE CURATED LENS. PHOTOGRAPHY AS MATERIAL.</p>
+            </div>
+            <div className="flex gap-8">
+              <a className="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all cursor-pointer">Archives</a>
+              <a className="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all cursor-pointer">Process</a>
+              <a className="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all cursor-pointer">Legal</a>
+            </div>
+          </div>
+        </footer>
+      )}
+    </div>
+  );
+}
+
+export default App;

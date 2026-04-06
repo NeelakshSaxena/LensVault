@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE CURATED LENS | Masonry Gallery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e4e2df",
+                    "inverse-surface": "#30312f",
+                    "surface-bright": "#fbf9f6",
+                    "primary-container": "#b4b2b2",
+                    "secondary-fixed-dim": "#e9c176",
+                    "on-background": "#1b1c1a",
+                    "inverse-primary": "#c8c6c5",
+                    "on-primary-fixed-variant": "#474746",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "on-tertiary-fixed": "#021e2d",
+                    "on-secondary-fixed-variant": "#5d4201",
+                    "secondary": "#775a19",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbdad7",
+                    "secondary-fixed": "#ffdea5",
+                    "secondary-container": "#fed488",
+                    "on-error": "#ffffff",
+                    "surface-container": "#efeeeb",
+                    "on-tertiary-fixed-variant": "#31495b",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1c1a",
+                    "surface-container-high": "#eae8e5",
+                    "outline": "#7f7663",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#785a1a",
+                    "primary-fixed": "#e5e2e1",
+                    "on-secondary-fixed": "#261900",
+                    "on-tertiary-container": "#304859",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#9db6ca",
+                    "on-primary-fixed": "#1c1b1b",
+                    "tertiary-fixed": "#cce6fb",
+                    "inverse-on-surface": "#f2f0ed",
+                    "outline-variant": "#d0c5af",
+                    "surface-container-low": "#f5f3f0",
+                    "primary": "#5f5e5e",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#496173",
+                    "surface": "#fbf9f6",
+                    "background": "#fbf9f6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#454545",
+                    "tertiary-fixed-dim": "#b1cade",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#5f5e5e",
+                    "on-surface-variant": "#4d4635",
+                    "surface-variant": "#e4e2df"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Manrope"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-auto-rows: 10px;
+        }
+        .masonry-item-short { grid-row-end: span 25; }
+        .masonry-item-tall { grid-row-end: span 45; }
+        .masonry-item-medium { grid-row-end: span 35; }
+        
+        .image-reveal:hover .metadata-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary/20 selection:text-secondary">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-black/70 backdrop-blur-xl shadow-sm shadow-stone-900/5">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-stone-800 dark:text-stone-100" data-icon="camera">camera</span>
+<span class="text-xl font-headline tracking-widest uppercase text-stone-900 dark:text-stone-50">THE CURATED LENS</span>
+</div>
+<div class="hidden md:flex gap-12 items-center">
+<a class="font-label text-xs tracking-[0.2em] uppercase text-stone-900 dark:text-stone-50 border-b border-stone-400 dark:border-stone-600 transition-colors duration-300" href="#">Gallery</a>
+<a class="font-label text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 transition-colors duration-300" href="#">About</a>
+<a class="font-label text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 transition-colors duration-300" href="#">Connect</a>
+<span class="material-symbols-outlined text-stone-800 dark:text-stone-100 cursor-pointer scale-95 duration-200" data-icon="dark_mode">dark_mode</span>
+</div>
+</div>
+</nav>
+<main class="pt-28 pb-20 px-8 max-w-screen-2xl mx-auto">
+<!-- Header Section -->
+<header class="mb-20 text-center md:text-left">
+<h1 class="font-headline italic text-5xl md:text-7xl tracking-tighter text-on-surface mb-6">Archives</h1>
+<p class="font-body text-stone-500 max-w-xl text-lg leading-relaxed">A chronological exploration of light and form. Every frame captured as a material witness to time.</p>
+</header>
+<!-- Gallery Sections -->
+<div class="space-y-32">
+<!-- Year Group 2024 -->
+<section>
+<div class="sticky top-[72px] z-40 bg-surface/90 backdrop-blur-md py-4 mb-12 flex items-baseline justify-between">
+<h2 class="font-headline text-4xl text-on-surface">2024</h2>
+<span class="font-label text-[10px] uppercase tracking-[0.3em] text-secondary">The Present Tense</span>
+</div>
+<!-- Month: May -->
+<div class="mb-20">
+<div class="mb-8 flex items-center gap-4">
+<span class="font-label text-xs uppercase tracking-widest text-stone-400">05 — May</span>
+<div class="h-px flex-grow bg-outline-variant/20"></div>
+</div>
+<div class="masonry-grid gap-6">
+<!-- Item 1 -->
+<div class="masonry-item-tall group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="dramatic mountain peaks reflected in still alpine lake during blue hour with misty atmosphere and moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq62LhLnsBhH4zFSOpfHIW6TFm1L6WKYBuLj1LU7w0BYOoPwD7on3XVpRhjp5DfVa2C2tRvNsowpFfQCxBHYC_0gmQXHSdUmsjE_3UQu5vnKSMLIkK2mj9txo2IU0SbW_H7uCbrExlxzB7DTAYVCQGjPFmXiZaNQkl2JsVkoCZXpAud3xJquTDFv2ysG2cICfIs7jEu5WB9b4or6eirHzXHxR9j_12x8ubIvYXNlnUrbnk5zcjUqVEbGJ8x-Tc5tyarixBz_LWgO_V"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">May 12, 2024</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Silent Peaks</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 35mm f/1.4
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 400
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/250
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="masonry-item-medium group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="abstract architectural details of modern white concrete building with sharp shadows and geometric shapes under bright sun" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_roicC63lwUeer-Sk9sRe2YX6xxs9XVGtUYKpZdDpZ6Z-WBCJw3D5YbVYu0uwbUkFmBZryx74-xWfHXh9UUYek9nje9EEBEnjaHrEjKZJd0CZ2Pk2Z_TMmTyoJm8u3kGyEqXOQ0nNGtNuSuf3-UXkhGqlGARRGLkNRAoLXQclzC1jGwaB5Z3rT1ZPvVEwVhV9JZnp_ok5UTqOcwwsAP1TSuyN6GtCwcKGa9GTeRxvdbkhKzQnTqBGz5l7PIc2tgX-hPI9gms7B2j4"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">May 08, 2024</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Concrete Geometry</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 50mm f/2.0
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 100
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/2000
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="masonry-item-short group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="minimalist landscape of single lonely tree in rolling green hills with soft afternoon light and hazy background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvt-5FlAk1YWNU4sxaO11-lX-MlGi895SkvnfTrMGWKGO2v6CMt8RBWxldAoFw8BmilBpAZc20YCa18t9JWRIeW3x5VCzDDse288DR0TLQYud8A8SsMRXt7lgUlvyyPq95lAPds92BVcr6W6si-UdMBdyF_sbMUZ5hy3Rt7My7L7yfATX-5hXDcpBUnvmBIRqOIVCbpr_0AbvCvI3JuvFJE89yUu-o-DYDSBjnVuGwY6qpJ4ZRQOtQpkaF0HcvFrYP3c8cSShzBKAF"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">May 02, 2024</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Isolation</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 85mm f/1.8
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 200
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/800
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Month: April -->
+<div class="mb-20">
+<div class="mb-8 flex items-center gap-4">
+<span class="font-label text-xs uppercase tracking-widest text-stone-400">04 — April</span>
+<div class="h-px flex-grow bg-outline-variant/20"></div>
+</div>
+<div class="masonry-grid gap-6">
+<!-- Item 4 -->
+<div class="masonry-item-medium group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="top-down shot of crashing turquoise ocean waves against dark volcanic rocks with white sea foam textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxH2sBrW4YTPWyqviw2KUBLB_YSXaIYX8bq4kCAfOlaRzC7Kao9znzT1mbNwqn7ZBHdB45fo3J7ULchQFN3_uXERFAFzC9pJswNfgIaBMs8h0HmtmPPtenlm858mOwOQAKV_0qux4YqLy-z9jfXQIdfhBmWpaQ-H8dHy_pzncvbssKIc9Un1z5GibPwbfhYAPM5QKdnYPkVSeH02YWXlZ9UvYsTw2QtpYQ7fLtMYOgMQeVWkPA5-z51TyaXVnMXUSubKJsFgtGX4DE"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">April 24, 2024</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">The Tides</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 24mm f/2.8
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 640
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/4000
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="masonry-item-tall group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="moody star-filled night sky over silhouetted forest with deep blue and purple hues and soft cosmic dust" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6Ck0T21HGNmNYxmeIdAqEFb_dLVmcZ0P5k__U4VEpLgUbv77MGjXG334ucshxmJ_qJWNlcW0DGSYFTFe0uSrVERfFhfzf5yHBLMoX2GfJV_eNaaRI4M_UeCMVTAay8TUqEXkLGfrrmOElMW-FIdabq5y7CIK-pkZ4B6sfMiNtofM_74obr-ambKddglc43_kT7fN8Mf8n1H6_TUPozNbzuIu4eScTh0qkuksxvERLtWejCRwT2ZCnxZS2IM_QIi-Q7CGxGX9Uc3GV"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">April 15, 2024</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Cosmic Silence</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 14mm f/1.8
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 3200
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 15s
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Year Group 2023 -->
+<section>
+<div class="sticky top-[72px] z-40 bg-surface/90 backdrop-blur-md py-4 mb-12 flex items-baseline justify-between">
+<h2 class="font-headline text-4xl text-on-surface">2023</h2>
+<span class="font-label text-[10px] uppercase tracking-[0.3em] text-secondary">The Archive</span>
+</div>
+<!-- Month: October -->
+<div class="mb-20">
+<div class="mb-8 flex items-center gap-4">
+<span class="font-label text-xs uppercase tracking-widest text-stone-400">10 — October</span>
+<div class="h-px flex-grow bg-outline-variant/20"></div>
+</div>
+<div class="masonry-grid gap-6">
+<!-- Item 6 -->
+<div class="masonry-item-short group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="cinematic sunset over calm lake with two empty wooden boats floating near the shore in warm orange light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBB9z98y9BUCuGkZ1QR2bYZTQgsUeKrht_8-G7aLyqdW0nO_xuQLOx2ib-_z9Ccz_lWhA5ALTvptt-Ljhevi6CGi7AO8tHGfhbF2uox62Fc0SavRxPhJUmRbVORFi5mqZE3vvkgM5STk24dzZNDRlFEKkfjcq7_JhYNIRQiiEUw9O6-tssO44tO62z-QEY-LMdx18CvNWuwFdmerYg1VpkXXQ_trDZh0Y3U3H5tVW4OH9hZJACqGDykPIzFs_dWepxPrpM8OaP9ElT"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">Oct 28, 2023</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Still Waters</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 35mm f/2.8
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 100
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/60
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 7 -->
+<div class="masonry-item-tall group relative overflow-hidden bg-surface-container-low rounded">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="enchanted misty forest at dawn with sun rays piercing through dense green foliage and tall trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT3R2LGa3q4A0kBTBXhsD9_9785mHUtDB7r0N2JRsYbBw78InSS0mx5JDD22c7Qri1MGAyxOkXFEuZCEsGoIJAN-2UFWWyKlAc5nSiSvlNHOqF2yEOrKpbKGdiCI4hV7uZM6JonfjmTOWI9cWcb3gcLp-Sioy85lEXt19qNwOBum5zeNwjjOr7jpbbM7A8DwLM0s5RrjUyjHZaxeMhLZCfwCf7i_e2cXXX0uzP41ePBiYV9DL9fSycNz-w8FavDqiGWcw7f0DQBbzD"/>
+<div class="metadata-overlay absolute inset-0 bg-on-background/60 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
+<div class="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary-fixed mb-2">Oct 12, 2023</p>
+<h3 class="font-headline text-white text-xl mb-4 italic">Fallen Light</h3>
+<div class="flex gap-4 border-t border-white/20 pt-4">
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Lens</span> 50mm f/1.2
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">ISO</span> 800
+                                        </div>
+<div class="text-white/70 font-label text-[9px] uppercase tracking-tighter">
+<span class="block text-white/40">Shutter</span> 1/125
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-stone-950 w-full py-12 px-8 mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto border-t border-stone-200/20 pt-12">
+<div class="flex flex-col gap-2">
+<span class="text-sm font-headline uppercase tracking-widest text-on-surface">THE CURATED LENS</span>
+<p class="font-label text-[10px] tracking-widest text-stone-400">© THE CURATED LENS. PHOTOGRAPHY AS MATERIAL.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Archives</a>
+<a class="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Process</a>
+<a class="font-label text-xs tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-all" href="#">Legal</a>
+</div>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-2 pb-6 px-4 bg-surface/80 dark:bg-stone-950/80 backdrop-blur-lg rounded-t-lg shadow-[0_-8px_24px_rgba(27,28,26,0.06)] z-50">
+<div class="flex flex-col items-center justify-center text-amber-700 dark:text-amber-500 font-bold font-body text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+            Gallery
+        </div>
+<div class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-600 font-body text-[10px] uppercase tracking-widest hover:bg-stone-100 dark:hover:bg-stone-800 transition-all duration-500">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+            About
+        </div>
+<div class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-600 font-body text-[10px] uppercase tracking-widest hover:bg-stone-100 dark:hover:bg-stone-800 transition-all duration-500">
+<span class="material-symbols-outlined mb-1" data-icon="google_drive">drive_file_gmail</span>
+            Connect
+        </div>
+</nav>
+</body></html>
