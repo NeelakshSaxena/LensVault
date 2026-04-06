@@ -15,9 +15,9 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex gap-12">
           {['Home', 'Gallery', 'About'].map(item => (
-            <Link key={item} to={item === 'Home' ? '/' : item === 'About' ? '/about' : '#'} className={`font-inter text-xs tracking-widest uppercase hover:text-secondary transition-colors ${isHero ? 'text-stone-600' : 'text-stone-400'}`}>
+            <a key={item} href={item === 'Home' ? '/' : item === 'About' ? '/about' : '/#gallery'} className={`font-inter text-xs tracking-widest uppercase hover:text-secondary transition-colors ${isHero ? 'text-stone-600' : 'text-stone-400'}`}>
               {item}
-            </Link>
+            </a>
           ))}
         </nav>
         <Link to="/" className={`hidden md:block border px-6 py-2 rounded-full font-inter text-[10px] tracking-widest uppercase transition-colors ${isHero ? 'border-primary text-primary hover:bg-primary/5' : 'border-stone-300 text-stone-600 hover:border-secondary hover:text-secondary'}`}>

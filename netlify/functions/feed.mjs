@@ -25,8 +25,8 @@ export default async (req, context) => {
 
       const feed = await store.get("feed", { type: "json" }) || [];
       
-      // Prevent duplicates based on URL
-      const isDuplicate = feed.some(img => img.url === payload.url);
+      // Prevent duplicates based on file ID
+      const isDuplicate = feed.some(img => img.id === payload.id);
       if (!isDuplicate) {
         feed.unshift({
           ...payload,
@@ -52,12 +52,12 @@ export default async (req, context) => {
     try {
       const payload = await req.json();
       
-      if (!payload.url) {
-         return new Response(JSON.stringify({ error: "Missing url" }), { status: 400 });
+      if (!payload.id) {
+         return new Response(JSON.stringify({ error: "Missing id" }), { status: 400 });
       }
 
       const feed = await store.get("feed", { type: "json" }) || [];
-      const newFeed = feed.filter(img => img.url !== payload.url);
+      const newFeed = feed.filter(img => img.id !== payload.id);
       
       await store.setJSON("feed", newFeed);
 

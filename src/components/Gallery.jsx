@@ -14,7 +14,7 @@ export default function Gallery({ images }) {
         const response = await fetch('/api/feed');
         if (response.ok) {
            const feed = await response.json();
-           const userShared = feed.filter(f => f.username === username).map(f => f.url);
+           const userShared = feed.filter(f => f.username === username).map(f => f.id);
            setGlobalUrls(new Set(userShared));
         }
       } catch(err) { console.error('Failed to load global feed', err); }
@@ -33,7 +33,7 @@ export default function Gallery({ images }) {
       });
       if (response.ok) {
          setShareStatus('Pinned to Global Feed!');
-         setGlobalUrls(prev => new Set(prev).add(image.url));
+         setGlobalUrls(prev => new Set(prev).add(image.id));
       } else {
          setShareStatus('Failed to pin.');
       }
@@ -51,13 +51,13 @@ export default function Gallery({ images }) {
       const response = await fetch('/api/feed', {
          method: 'DELETE',
          headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({ url: image.url })
+         body: JSON.stringify({ id: image.id })
       });
       if (response.ok) {
          setShareStatus('Removed from Global Feed!');
          setGlobalUrls(prev => {
            const next = new Set(prev);
-           next.delete(image.url);
+           next.delete(image.id);
            return next;
          });
       } else {
@@ -117,7 +117,7 @@ export default function Gallery({ images }) {
 
                 <div className="masonry-grid gap-6">
                   {groupedImages[year][monthKey].map((image, index) => {
-                    const isShared = globalUrls.has(image.url);
+                    const isShared = globalUrls.has(image.id);
                     return (
                     <div 
                       key={image.id} 
@@ -173,7 +173,7 @@ export default function Gallery({ images }) {
             
             <div className="absolute -top-12 right-0 flex gap-4 items-center">
               <span className="text-secondary tracking-widest text-xs uppercase">{shareStatus}</span>
-              {globalUrls.has(selectedImage.url) ? (
+              {globalUrls.has(selectedImage.id) ? (
                 <button 
                   onClick={(e) => handleUnshare(e, selectedImage)}
                   className="text-primary hover:text-error transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-error/20 flex gap-2 items-center"

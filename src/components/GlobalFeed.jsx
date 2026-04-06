@@ -34,7 +34,7 @@ export default function GlobalFeed() {
   };
 
   return (
-    <section className="w-full max-w-screen-2xl mx-auto px-8 py-24 border-t border-stone-200/20">
+    <section id="gallery" className="w-full max-w-screen-2xl mx-auto px-8 py-24 border-t border-stone-200/20">
       <div className="text-center mb-16">
         <h2 className="font-headline italic text-4xl text-on-surface mb-2">The Global Archive</h2>
         <p className="font-label text-xs uppercase tracking-[0.3em] text-stone-400">Curated by the community</p>

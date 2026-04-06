@@ -102,3 +102,18 @@
   writing-mode: vertical-rl;
   text-orientation: mixed;
 }
+
+@keyframes pulseSlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(var(--color-primary), 0.2);
+    border-color: rgba(var(--color-primary), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(var(--color-primary), 0.7);
+    border-color: rgba(var(--color-primary), 1);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
