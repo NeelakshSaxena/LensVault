@@ -121,14 +121,16 @@ export default function Gallery({ images }) {
                     return (
                     <div 
                       key={image.id} 
-                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded ${isShared ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface animate-pulse-slow' : ''}`}
+                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative bg-surface-container-low rounded-lg ${isShared ? 'animate-glow' : 'overflow-hidden'}`}
                       onClick={() => setSelectedImage(image)}
                     >
                       <img 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${isShared ? 'rounded-lg' : ''}`}
                         src={image.url} 
                         alt={image.name} 
                         loading="lazy"
+                        draggable="false"
+                        onContextMenu={(e) => e.preventDefault()}
                       />
                       <div className="metadata-overlay absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
                         <div className="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
@@ -164,11 +166,13 @@ export default function Gallery({ images }) {
           className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative max-w-7xl max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+          <div className="relative max-w-[90vw] max-h-[85vh] w-full flex justify-center isolate" onClick={e => e.stopPropagation()}>
             <img 
               src={selectedImage.url} 
               alt={selectedImage.name} 
-              className="max-w-full max-h-[85vh] object-contain rounded drop-shadow-2xl"
+              draggable="false"
+              onContextMenu={(e) => e.preventDefault()}
+              className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl"
             />
             
             <div className="absolute -top-12 right-0 flex gap-4 items-center">

@@ -52,6 +52,8 @@ export default function GlobalFeed() {
               src={image.url} 
               alt={image.name} 
               loading="lazy"
+              draggable="false"
+              onContextMenu={(e) => e.preventDefault()}
             />
             <div className="metadata-overlay absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
               <div className="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
@@ -82,6 +84,8 @@ export default function GlobalFeed() {
               src={selectedGlobalImage.url} 
               alt={selectedGlobalImage.name} 
               className="max-w-full max-h-[85vh] object-contain rounded drop-shadow-2xl"
+              draggable="false"
+              onContextMenu={(e) => e.preventDefault()}
             />
             
             <div className="absolute -top-12 right-0 flex gap-4 items-center">
