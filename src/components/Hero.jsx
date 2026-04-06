@@ -1,125 +1,185 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
-export default function Hero({ onConnect, isLoading }) {
+function Hero() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [folderLink, setFolderLink] = useState('');
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [authStep, setAuthStep] = useState('login');
+  const [userEmail, setUserEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      setStatus('Checking account...');
+      const decoded = jwtDecode(credentialResponse.credential);
+      const email = decoded.email;
+      setUserEmail(email);
+
+      const response = await fetch(`/api/profile?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+
+      if (data.exists) {
+         setStatus('Logged in! Redirecting...');
+         navigate(`/${data.username}`);
+      } else {
+         setStatus('');
+         setAuthStep('create_account');
+      }
+    } catch(err) {
+       setStatus('Error checking authentication.');
+    } finally {
+       setLoading(false);
+    }
+  };
+
+  const createPortfolio = async (e) => {
     e.preventDefault();
     if (!username || !folderLink) return;
-    onConnect(username, folderLink);
+
+    setStatus('Creating permanent account...');
+    setLoading(true);
+
+    try {
+      let extractedFolderId = folderLink;
+      if (folderLink.includes('folders/')) {
+        extractedFolderId = folderLink.split('folders/')[1].split('?')[0];
+      } else if (folderLink.includes('id=')) {
+        extractedFolderId = folderLink.split('id=')[1].split('&')[0];
+      }
+
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, username, folderId: extractedFolderId })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setStatus(`Error: ${data.error}`);
+        setLoading(false);
+        return;
+      }
+
+      setStatus('Success! Redirecting...');
+      navigate(`/${data.username}`);
+    } catch (error) {
+      setStatus('Failed to create account. Please try again.');
+      setLoading(false);
+    }
   };
 
   return (
-    <main>
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-surface">
-        <div className="absolute inset-0 z-0 opacity-90">
-          <img alt="Cinematic wide shot" className="w-full h-full object-cover grayscale brightness-95" src="/stitch_screens/hero.png" onError={(e) => { e.target.src = 'https://source.unsplash.com/random/1920x1080/?landscape,misty,mountains'; }} />
-        </div>
-        <div className="relative z-10 text-center px-6">
-          <h2 className="text-stone-900/40 font-manrope text-xs tracking-[0.4em] uppercase mb-8">Photography by</h2>
-          <h1 className="text-stone-900 font-notoSerif italic text-7xl md:text-9xl tracking-tighter leading-none mb-12">
-            LensVault
-          </h1>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-12">
-            <button onClick={() => window.scrollTo({top: window.innerHeight, behavior: 'smooth'})} className="bg-primary text-on-primary px-10 py-4 font-manrope text-[10px] uppercase tracking-widest hover:bg-secondary transition-all duration-300 shadow-xl shadow-stone-950/5">
-              Start Curating
-            </button>
-            <div className="flex items-center gap-4 text-stone-500 font-inter text-[10px] uppercase tracking-widest">
-              <span>EST. 2026</span>
-              <span className="w-12 h-px bg-stone-300"></span>
-              <span>Global</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-stone-400">
-          <span className="font-manrope text-[10px] uppercase tracking-widest">Connect</span>
-          <div className="w-px h-16 bg-stone-200 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1/2 bg-stone-500 animate-pulse"></div>
-          </div>
-        </div>
-      </section>
+    <div className="w-full min-h-[70vh] flex flex-col justify-center items-center px-4 py-20 text-center animate-fade-in relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px] -z-10 animate-pulse-slow pointer-events-none"></div>
 
-      <section className="py-32 px-8 bg-surface-container-low min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-            <div className="lg:col-span-5">
-              <span className="text-secondary font-manrope text-[10px] uppercase tracking-[0.3em] font-bold block mb-6">Integration</span>
-              <h2 className="font-notoSerif text-5xl leading-tight text-on-surface mb-8">
-                Photography as <br /><span className="italic">Material</span>.
-              </h2>
-              <p className="font-manrope text-stone-600 leading-relaxed mb-12 max-w-md">
-                Your visual narrative deserves a seamless bridge. Connect your raw archives directly through Google Drive for automated curation and instantly share your portfolio with the world.
+      <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-outline bg-surface-container/50 text-xs font-semibold tracking-wider text-secondary uppercase backdrop-blur-sm shadow-sm ring-1 ring-inset ring-white/10 pt-[7px]">
+        Welcome to LensVault
+      </div>
+      
+      <h1 className="text-[52px] md:text-[84px] leading-none mb-6 text-on-surface font-notoSerif italic font-light tracking-[-0.04em]">
+        The Curated Lens
+      </h1>
+      
+      <p className="text-on-surface-variant max-w-2xl mx-auto mb-12 text-lg md:text-xl font-light font-manrope leading-relaxed">
+        Curate your photography automatically. Connect your Google Drive and share your beautiful, dynamic portfolio with clients instantly.
+      </p>
+
+      {authStep === 'login' ? (
+        <div className="w-[380px] flex flex-col items-center bg-surface-container rounded-3xl p-8 border border-outline shadow-xl backdrop-blur-md">
+           <h3 className="text-xl font-bold font-manrope text-on-surface mb-2">Photographer Portal</h3>
+           <p className="text-sm font-inter text-on-surface-variant mb-6">Sign in with Google to manage your portfolio.</p>
+           
+           <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setStatus('Google Sign-In Failed')}
+              theme="filled_black"
+              size="large"
+              shape="pill"
+           />
+           
+           {status && <p className="mt-4 text-xs font-inter text-secondary font-medium tracking-wide">{status}</p>}
+        </div>
+      ) : (
+        <form 
+          onSubmit={createPortfolio}
+          className="w-full max-w-md mx-auto flex flex-col gap-5 bg-surface-container rounded-3xl p-8 border border-outline shadow-xl backdrop-blur-md"
+        >
+          <div className="bg-[#ba1a1a]/10 border border-[#ba1a1a]/20 p-4 rounded-2xl flex items-start gap-3 text-left">
+            <span className="material-symbols-outlined text-[#ba1a1a] mt-0.5">warning</span>
+            <div>
+              <p className="text-sm font-semibold font-manrope text-[#ba1a1a] mb-1">Permanent Username</p>
+              <p className="text-xs font-inter text-[#ba1a1a]/80 leading-relaxed">
+                Choose carefully! Your username will form your permanent portfolio link (/{username || 'username'}). Once set, it is locked to your Gmail forever.
               </p>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4 p-6 bg-surface-container-lowest border border-stone-100 transition-all duration-300 hover:shadow-lg hover:shadow-stone-900/5 group">
-                  <span className="material-symbols-outlined text-stone-400 group-hover:text-secondary transition-colors" data-icon="share">share</span>
-                  <div>
-                    <h4 className="font-manrope font-bold text-xs uppercase tracking-widest mb-1">Live Synchronization</h4>
-                    <p className="text-xs text-stone-500">Real-time updates as you upload new projects. Share your /username link anywhere.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="lg:col-span-7 w-full">
-              <div className="relative bg-surface-container-lowest p-16 animate-fade-in shadow-2xl shadow-stone-900/5 overflow-hidden">
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-surface-container rounded-full opacity-50 blur-3xl"></div>
-                <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="w-24 h-24 bg-surface-container-low rounded-full flex items-center justify-center mb-10">
-                    <span className="material-symbols-outlined text-stone-900 text-4xl" data-icon="google_drive">drive_file_gmail</span>
-                  </div>
-                  <h3 className="font-notoSerif italic text-3xl mb-4">Create Portfolio</h3>
-                  <p className="font-manrope text-sm text-stone-500 mb-12 max-w-sm">
-                    Enter a unique username and connect your open-access Google Drive folder linking.
-                  </p>
-                  
-                  <form onSubmit={handleSubmit} className="w-full max-w-md space-y-8">
-                    <div className="relative group text-left">
-                      <label className="text-[10px] uppercase font-manrope tracking-widest text-stone-400 mb-2 block">Choose Username</label>
-                      <input 
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full bg-transparent border-0 border-b border-stone-200 py-3 px-0 focus:ring-0 focus:border-secondary transition-all font-manrope text-sm placeholder:text-stone-300" 
-                        placeholder="e.g. julian-vane" 
-                        type="text" 
-                        required
-                      />
-                    </div>
-                    
-                    <div className="relative group text-left">
-                       <label className="text-[10px] uppercase font-manrope tracking-widest text-stone-400 mb-2 block">Google Drive Folder Link</label>
-                      <input 
-                        value={folderLink}
-                        onChange={(e) => setFolderLink(e.target.value)}
-                        className="w-full bg-transparent border-0 border-b border-stone-200 py-3 px-0 focus:ring-0 focus:border-secondary transition-all font-manrope text-sm placeholder:text-stone-300" 
-                        placeholder="https://drive.google.com/drive/folders/..." 
-                        type="text" 
-                        required
-                      />
-                    </div>
-                    
-                    <button 
-                      type="submit" 
-                      disabled={isLoading}
-                      className="w-full bg-stone-900 text-stone-50 py-5 font-manrope text-[10px] uppercase tracking-widest hover:bg-secondary transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50"
-                    >
-                      {isLoading ? (
-                        <span className="material-symbols-outlined animate-spin">refresh</span>
-                      ) : (
-                        <>
-                          Create Shareable Link
-                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+
+          <div className="flex flex-col text-left group">
+            <label htmlFor="username" className="text-xs font-bold font-manrope uppercase tracking-widest text-[#5d5e5b] mb-2 pl-1 group-focus-within:text-primary transition-colors">
+              Photographer Alias
+            </label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 font-inter">@</span>
+              <input 
+                id="username"
+                type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                placeholder="julian-vane" 
+                className="w-full bg-surface border border-outline rounded-2xl px-4 py-4 pl-9 text-on-surface font-inter placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary transition-all tracking-wide text-sm"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col text-left group">
+            <label htmlFor="folderLink" className="text-xs font-bold font-manrope uppercase tracking-widest text-[#5d5e5b] mb-2 pl-1 group-focus-within:text-primary transition-colors">
+              Google Drive Folder Link
+            </label>
+            <input 
+              id="folderLink"
+              type="text" 
+              value={folderLink}
+              onChange={(e) => setFolderLink(e.target.value)}
+              placeholder="https://drive.google.com/drive/folders/..." 
+              className="w-full bg-surface border border-outline rounded-2xl px-4 py-4 text-on-surface font-inter placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary transition-all tracking-wide text-sm"
+              required
+            />
+            <p className="text-xs font-inter text-on-surface-variant mt-2 pl-1 italic">Must be set to "Anyone with the link can view"</p>
+          </div>
+
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary text-on-primary hover:bg-primary/90 font-medium py-4 px-6 rounded-2xl transition-all shadow-md mt-2 tracking-wide disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden font-manrope text-sm"
+          >
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <span className="relative flex items-center justify-center gap-2">
+              {loading ? (
+                <>
+                  <span className="material-symbols-outlined animate-spin text-lg">sync</span>
+                  Creating Vault...
+                </>
+              ) : (
+                <>
+                  Connect Portfolio
+                  <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </>
+              )}
+            </span>
+          </button>
+          
+          {status && <p className={`text-sm font-medium mt-2 font-inter ${status.includes('Error') ? 'text-error' : 'text-primary'}`}>{status}</p>}
+        </form>
+      )}
+    </div>
   );
 }
+
+export default Hero;

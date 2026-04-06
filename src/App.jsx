@@ -13,17 +13,11 @@ function Portfolio() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchPortfolioData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
-        if (!res.ok) throw new Error("Profile not found. They might not have connected their Google Drive yet.");
-        
-        const data = await res.json();
-        const { folderId } = data;
-        
-        const driveData = await connectToGoogleDrive(folderId);
+        const driveData = await connectToGoogleDrive(username);
         if (driveData.files && driveData.files.length > 0) {
           setImages(driveData.files);
         } else {
@@ -36,7 +30,7 @@ function Portfolio() {
         setLoading(false);
       }
     };
-    if (username) fetchProfile();
+    if (username) fetchPortfolioData();
   }, [username]);
 
   if (loading) {
@@ -60,38 +54,8 @@ function Portfolio() {
 }
 
 function Home() {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const handleConnect = async (username, folderLink) => {
-    setLoading(true);
-    try {
-      let folderId = folderLink;
-      if (folderLink.includes('folders/')) {
-         folderId = folderLink.split('folders/')[1].split('?')[0];
-      } else if (folderLink.includes('id=')) {
-         folderId = folderLink.split('id=')[1].split('&')[0];
-      }
-
-      const res = await fetch('/api/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, folderId })
-      });
-      
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-
-      navigate(`/${data.username}`);
-    } catch (e) {
-      alert("Error: " + e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <Hero onConnect={handleConnect} isLoading={loading} />
+    <Hero />
   );
 }
 
