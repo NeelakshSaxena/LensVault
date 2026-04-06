@@ -14,7 +14,7 @@ export default function Gallery({ images }) {
         const response = await fetch('/api/feed');
         if (response.ok) {
            const feed = await response.json();
-           const userShared = feed.filter(f => f.username === username).map(f => f.id);
+           const userShared = feed.filter(f => f.username?.toLowerCase() === username?.toLowerCase()).map(f => f.id);
            setGlobalUrls(new Set(userShared));
         }
       } catch(err) { console.error('Failed to load global feed', err); }
@@ -29,7 +29,7 @@ export default function Gallery({ images }) {
       const response = await fetch('/api/feed', {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({ ...image, username })
+         body: JSON.stringify({ ...image, username: username?.toLowerCase() })
       });
       if (response.ok) {
          setShareStatus('Pinned to Global Feed!');
@@ -121,7 +121,7 @@ export default function Gallery({ images }) {
                     return (
                     <div 
                       key={image.id} 
-                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded ${isShared ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface shadow-[0_0_15px_rgba(var(--color-primary),0.3)] animate-pulse-slow' : ''}`}
+                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded ${isShared ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface animate-pulse-slow' : ''}`}
                       onClick={() => setSelectedImage(image)}
                     >
                       <img 
