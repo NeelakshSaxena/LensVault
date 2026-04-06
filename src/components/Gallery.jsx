@@ -1,8 +1,30 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
 export default function Gallery({ images }) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [shareStatus, setShareStatus] = useState('');
+  const { username } = useParams();
+
+  const handleShare = async (e, image) => {
+    e.stopPropagation();
+    setShareStatus('Pinning...');
+    try {
+      const response = await fetch('/api/feed', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ ...image, username })
+      });
+      if (response.ok) setShareStatus('Pinned to Global Feed!');
+      else setShareStatus('Failed to pin.');
+      
+      setTimeout(() => setShareStatus(''), 3000);
+    } catch(err) {
+       setShareStatus('Error pinning.');
+       setTimeout(() => setShareStatus(''), 3000);
+    }
+  };
 
   // Group images by year and month
   const groupedImages = images.reduce((acc, image) => {
@@ -103,12 +125,22 @@ export default function Gallery({ images }) {
               className="max-w-full max-h-[85vh] object-contain rounded drop-shadow-2xl"
             />
             
-            <button 
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 text-white/50 hover:text-white transition-colors"
-            >
-              <span className="material-symbols-outlined text-3xl">close</span>
-            </button>
+            <div className="absolute -top-12 right-0 flex gap-4 items-center">
+              <span className="text-secondary tracking-widest text-xs uppercase">{shareStatus}</span>
+              <button 
+                onClick={(e) => handleShare(e, selectedImage)}
+                className="text-white/70 hover:text-white transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-white/20 flex gap-2 items-center"
+              >
+                <span className="material-symbols-outlined text-[16px]">public</span>
+                Share to global
+              </button>
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="text-white/50 hover:text-white transition-colors ml-4"
+              >
+                <span className="material-symbols-outlined text-3xl">close</span>
+              </button>
+            </div>
 
             <div className="absolute -bottom-16 left-0 right-0 text-center">
                <h3 className="font-headline text-white text-lg italic">{selectedImage.name}</h3>
