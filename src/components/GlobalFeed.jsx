@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 export default function GlobalFeed() {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGlobalImage, setSelectedGlobalImage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,11 +42,9 @@ export default function GlobalFeed() {
 
       <div className="masonry-grid gap-4">
         {feed.map((image, index) => (
-          <a 
+          <div 
             key={`${image.id}-${index}`} 
-            href={`/${image.username}`}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => setSelectedGlobalImage(image)}
             className={`${getMasonryClass(index)} block cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded`}
           >
             <img 
@@ -68,9 +67,47 @@ export default function GlobalFeed() {
                 </div>
               </div>
             </div>
-          </a>
+          </div>
         ))}
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedGlobalImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
+          onClick={() => setSelectedGlobalImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+            <img 
+              src={selectedGlobalImage.url} 
+              alt={selectedGlobalImage.name} 
+              className="max-w-full max-h-[85vh] object-contain rounded drop-shadow-2xl"
+            />
+            
+            <div className="absolute -top-12 right-0 flex gap-4 items-center">
+              <a 
+                href={`/${selectedGlobalImage.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/70 hover:text-white transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-white/20 flex gap-2 items-center"
+              >
+                <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                View @{selectedGlobalImage.username}&apos;s Portfolio
+              </a>
+              <button 
+                onClick={() => setSelectedGlobalImage(null)}
+                className="text-white/50 hover:text-white transition-colors ml-4"
+              >
+                <span className="material-symbols-outlined text-3xl">close</span>
+              </button>
+            </div>
+
+            <div className="absolute -bottom-16 left-0 right-0 text-center">
+               <h3 className="font-headline text-white text-lg italic">{selectedGlobalImage.name || "Untitled"}</h3>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
