@@ -41,10 +41,12 @@ export default function GlobalFeed() {
 
       <div className="masonry-grid gap-4">
         {feed.map((image, index) => (
-          <div 
+          <a 
             key={`${image.id}-${index}`} 
-            className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded`}
-            onClick={() => navigate(`/${image.username}`)}
+            href={`/${image.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${getMasonryClass(index)} block cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded`}
           >
             <img 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
@@ -66,7 +68,7 @@ export default function GlobalFeed() {
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </section>

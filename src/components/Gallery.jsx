@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 
 export default function Gallery({ images }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [shareStatus, setShareStatus] = useState('');
+  const [globalUrls, setGlobalUrls] = useState(new Set());
   const { username } = useParams();
+
+  useEffect(() => {
+    async function fetchFeed() {
+      try {
+        const response = await fetch('/api/feed');
+        if (response.ok) {
+           const feed = await response.json();
+           const userShared = feed.filter(f => f.username === username).map(f => f.url);
+           setGlobalUrls(new Set(userShared));
+        }
+      } catch(err) { console.error('Failed to load global feed', err); }
+    }
+    fetchFeed();
+  }, [username]);
 
   const handleShare = async (e, image) => {
     e.stopPropagation();
@@ -16,12 +31,41 @@ export default function Gallery({ images }) {
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({ ...image, username })
       });
-      if (response.ok) setShareStatus('Pinned to Global Feed!');
-      else setShareStatus('Failed to pin.');
-      
+      if (response.ok) {
+         setShareStatus('Pinned to Global Feed!');
+         setGlobalUrls(prev => new Set(prev).add(image.url));
+      } else {
+         setShareStatus('Failed to pin.');
+      }
       setTimeout(() => setShareStatus(''), 3000);
     } catch(err) {
        setShareStatus('Error pinning.');
+       setTimeout(() => setShareStatus(''), 3000);
+    }
+  };
+
+  const handleUnshare = async (e, image) => {
+    e.stopPropagation();
+    setShareStatus('Unpinning...');
+    try {
+      const response = await fetch('/api/feed', {
+         method: 'DELETE',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ url: image.url })
+      });
+      if (response.ok) {
+         setShareStatus('Removed from Global Feed!');
+         setGlobalUrls(prev => {
+           const next = new Set(prev);
+           next.delete(image.url);
+           return next;
+         });
+      } else {
+         setShareStatus('Failed to unpin.');
+      }
+      setTimeout(() => setShareStatus(''), 3000);
+    } catch(err) {
+       setShareStatus('Error unpinning.');
        setTimeout(() => setShareStatus(''), 3000);
     }
   };
@@ -72,10 +116,12 @@ export default function Gallery({ images }) {
                 </div>
 
                 <div className="masonry-grid gap-6">
-                  {groupedImages[year][monthKey].map((image, index) => (
+                  {groupedImages[year][monthKey].map((image, index) => {
+                    const isShared = globalUrls.has(image.url);
+                    return (
                     <div 
                       key={image.id} 
-                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded`}
+                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded ${isShared ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface shadow-[0_0_15px_rgba(var(--color-primary),0.3)] animate-pulse-slow' : ''}`}
                       onClick={() => setSelectedImage(image)}
                     >
                       <img 
@@ -104,7 +150,7 @@ export default function Gallery({ images }) {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
             ))}
@@ -127,13 +173,23 @@ export default function Gallery({ images }) {
             
             <div className="absolute -top-12 right-0 flex gap-4 items-center">
               <span className="text-secondary tracking-widest text-xs uppercase">{shareStatus}</span>
-              <button 
-                onClick={(e) => handleShare(e, selectedImage)}
-                className="text-white/70 hover:text-white transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-white/20 flex gap-2 items-center"
-              >
-                <span className="material-symbols-outlined text-[16px]">public</span>
-                Share to global
-              </button>
+              {globalUrls.has(selectedImage.url) ? (
+                <button 
+                  onClick={(e) => handleUnshare(e, selectedImage)}
+                  className="text-primary hover:text-error transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-error/20 flex gap-2 items-center"
+                >
+                  <span className="material-symbols-outlined text-[16px]">public_off</span>
+                  Unshare from global
+                </button>
+              ) : (
+                <button 
+                  onClick={(e) => handleShare(e, selectedImage)}
+                  className="text-white/70 hover:text-white transition-colors bg-white/10 px-4 py-1.5 rounded-full text-xs font-inter uppercase tracking-widest border border-white/20 hover:bg-white/20 flex gap-2 items-center"
+                >
+                  <span className="material-symbols-outlined text-[16px]">public</span>
+                  Share to global
+                </button>
+              )}
               <button 
                 onClick={() => setSelectedImage(null)}
                 className="text-white/50 hover:text-white transition-colors ml-4"
