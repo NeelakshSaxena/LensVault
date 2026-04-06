@@ -15,7 +15,7 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex gap-12">
           {['Home', 'Gallery', 'About'].map(item => (
-            <Link key={item} to={item === 'Home' ? '/' : '#'} className={`font-inter text-xs tracking-widest uppercase hover:text-secondary transition-colors ${isHero ? 'text-stone-600' : 'text-stone-400'}`}>
+            <Link key={item} to={item === 'Home' ? '/' : item === 'About' ? '/about' : '#'} className={`font-inter text-xs tracking-widest uppercase hover:text-secondary transition-colors ${isHero ? 'text-stone-600' : 'text-stone-400'}`}>
               {item}
             </Link>
           ))}

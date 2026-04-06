@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export default function Gallery({ images }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -118,3 +119,19 @@ export default function Gallery({ images }) {
     </main>
   );
 }
+
+Gallery.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      createdTime: PropTypes.string.isRequired,
+      metadata: PropTypes.shape({
+        lens: PropTypes.string,
+        iso: PropTypes.string,
+        shutter: PropTypes.string
+      })
+    })
+  ).isRequired
+};

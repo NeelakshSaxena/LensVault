@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import EmptyState from './components/EmptyState';
 import Gallery from './components/Gallery';
+import About from './components/About';
 import { connectToGoogleDrive } from './services/googleDrive';
 
 function Portfolio() {
@@ -69,6 +70,7 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/:username" element={<Portfolio />} />
       </Routes>
       
