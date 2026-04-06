@@ -1,4 +1,8 @@
+import { useState } from 'react';
+
 export default function Gallery({ images }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   // Group images by year and month
   const groupedImages = images.reduce((acc, image) => {
     const date = new Date(image.createdTime || Date.now());
@@ -46,11 +50,16 @@ export default function Gallery({ images }) {
 
                 <div className="masonry-grid gap-6">
                   {groupedImages[year][monthKey].map((image, index) => (
-                    <div key={image.id} className={`${getMasonryClass(index)} image-reveal group relative overflow-hidden bg-surface-container-low rounded`}>
+                    <div 
+                      key={image.id} 
+                      className={`${getMasonryClass(index)} cursor-pointer image-reveal group relative overflow-hidden bg-surface-container-low rounded`}
+                      onClick={() => setSelectedImage(image)}
+                    >
                       <img 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                         src={image.url} 
                         alt={image.name} 
+                        loading="lazy"
                       />
                       <div className="metadata-overlay absolute inset-0 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-6">
                         <div className="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
@@ -79,6 +88,33 @@ export default function Gallery({ images }) {
           </section>
         ))}
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-full flex items-center justify-center cursor-default" onClick={e => e.stopPropagation()}>
+            <img 
+              src={selectedImage.url} 
+              alt={selectedImage.name} 
+              className="max-w-full max-h-[85vh] object-contain rounded drop-shadow-2xl"
+            />
+            
+            <button 
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-12 right-0 text-white/50 hover:text-white transition-colors"
+            >
+              <span className="material-symbols-outlined text-3xl">close</span>
+            </button>
+
+            <div className="absolute -bottom-16 left-0 right-0 text-center">
+               <h3 className="font-headline text-white text-lg italic">{selectedImage.name}</h3>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

@@ -44,7 +44,7 @@ export default async (req, context) => {
 
   try {
       const query = `'${folderId}' in parents and mimeType contains 'image/' and trashed = false`;
-      const fields = "files(id, name, mimeType, webContentLink, createdTime, imageMediaMetadata)";
+      const fields = "files(id, name, mimeType, webContentLink, thumbnailLink, createdTime, imageMediaMetadata)";
       
       const response = await fetch(
         `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=${encodeURIComponent(fields)}&key=${API_KEY}`
@@ -59,17 +59,23 @@ export default async (req, context) => {
       const transformed = {
         id: folderId,
         name: "ARCHIVES",
-        files: data.files.map(file => ({
-          id: file.id,
-          name: file.name,
-          url: file.webContentLink,
-          createdTime: file.createdTime,
-          metadata: {
-            lens: file.imageMediaMetadata?.lens || "Unknown Lens",
-            iso: file.imageMediaMetadata?.isoSpeed || "Auto",
-            shutter: file.imageMediaMetadata?.exposureTime ? `1/${Math.round(1 / file.imageMediaMetadata.exposureTime)}` : "Unknown"
-          }
-        }))
+        files: data.files.map(file => {
+          // Use the thumbnailLink but upgrade the resolution parameter to 2000px
+          // This bypasses CORS and auth prompts normally placed on webContentLink
+          const imageUrl = file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+/, "=s2000") : file.webContentLink;
+
+          return {
+            id: file.id,
+            name: file.name,
+            url: imageUrl,
+            createdTime: file.createdTime,
+            metadata: {
+              lens: file.imageMediaMetadata?.lens || "Unknown Lens",
+              iso: file.imageMediaMetadata?.isoSpeed || "Auto",
+              shutter: file.imageMediaMetadata?.exposureTime ? `1/${Math.round(1 / file.imageMediaMetadata.exposureTime)}` : "Unknown"
+            }
+          };
+        })
       };
 
       return new Response(JSON.stringify(transformed), {

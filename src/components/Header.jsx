@@ -5,7 +5,7 @@ export default function Header() {
   const isHero = location.pathname === '/';
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${isHero ? 'bg-transparent border-transparent' : 'bg-surface/80 backdrop-blur-md border-stone-200/20 dark:bg-stone-950/80 dark:border-stone-800/50'}`}>
+    <header className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${isHero ? 'bg-transparent border-transparent' : 'bg-surface/80 backdrop-blur-md border-stone-200/20'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link to="/" className="flex flex-col group cursor-pointer">
           <span className={`font-notoSerif italic text-xl md:text-2xl tracking-tighter ${isHero ? 'text-stone-900' : 'text-on-surface'}`}>
@@ -20,7 +20,7 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <Link to="/" className={`hidden md:block border px-6 py-2 rounded-full font-inter text-[10px] tracking-widest uppercase transition-colors ${isHero ? 'border-primary text-primary hover:bg-primary/5' : 'border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-400 hover:border-secondary hover:text-secondary'}`}>
+        <Link to="/" className={`hidden md:block border px-6 py-2 rounded-full font-inter text-[10px] tracking-widest uppercase transition-colors ${isHero ? 'border-primary text-primary hover:bg-primary/5' : 'border-stone-300 text-stone-600 hover:border-secondary hover:text-secondary'}`}>
           Join
         </Link>
         <button className="md:hidden">
