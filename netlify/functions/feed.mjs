@@ -28,8 +28,23 @@ export default async (req, context) => {
       // Prevent duplicates based on file ID
       const isDuplicate = feed.some(img => img.id === payload.id);
       if (!isDuplicate) {
+        
+        // Cache the image into a BLOB store
+        try {
+           const imgRes = await fetch(payload.url);
+           if (imgRes.ok) {
+              const buffer = await imgRes.arrayBuffer();
+              const cType = imgRes.headers.get("content-type") || "image/jpeg";
+              const imageStore = getStore("images");
+              await imageStore.set(payload.id, buffer, { metadata: { type: cType } });
+           }
+        } catch(e) {
+           console.error("Failed to cache image for global feed", e);
+        }
+
         feed.unshift({
           ...payload,
+          url: `/api/image?id=${payload.id}`,
           pinnedAt: new Date().toISOString()
         });
         
@@ -60,6 +75,12 @@ export default async (req, context) => {
       const newFeed = feed.filter(img => img.id !== payload.id);
       
       await store.setJSON("feed", newFeed);
+
+      // Clean up the image blob
+      try {
+          const imageStore = getStore("images");
+          await imageStore.delete(payload.id);
+      } catch(e) { console.error("Failed to delete cached image", e); }
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
